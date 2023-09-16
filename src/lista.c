@@ -9,7 +9,8 @@ typedef struct nodo {
 
 struct lista {
 	nodo_t *nodo_inicio;
-	//algo mas?
+	int cant_nodos;
+	nodo_t *nodo_fin;
 };
 
 struct lista_iterador {
@@ -19,17 +20,54 @@ struct lista_iterador {
 
 lista_t *lista_crear()
 {
-	return NULL;
+	struct lista *nueva_lista = calloc(1, sizeof(struct lista *));
+
+	if(nueva_lista == NULL){
+		return NULL;
+	}
+
+	return nueva_lista;
+}
+
+nodo_t *nuevo_nodo(void *elemento){
+
+    nodo_t* nodo = calloc(1, sizeof(nodo_t));
+	
+    if (nodo == NULL)
+        return NULL;
+
+    nodo->elemento = elemento;
+
+    return nodo;
 }
 
 lista_t *lista_insertar(lista_t *lista, void *elemento)
 {
-	return NULL;
+
+	if(lista == NULL)
+		return NULL;
+
+	nodo_t *nodo = nuevo_nodo(elemento);
+
+	if(nodo == NULL)
+		return NULL;
+
+	if(lista_vacia(lista)){
+		lista->nodo_inicio = nodo;
+		lista->nodo_fin = nodo;
+		lista->nodo_fin->siguiente = NULL;
+	}else{
+		lista->nodo_fin->siguiente = nodo;
+		lista->nodo_fin = nodo;
+	}
+
+	return lista;
 }
 
-lista_t *lista_insertar_en_posicion(lista_t *lista, void *elemento,
-				    size_t posicion)
+lista_t *lista_insertar_en_posicion(lista_t *lista, void *elemento, size_t posicion)
 {
+
+	printf("%i", posicion);
 	return NULL;
 }
 
@@ -48,30 +86,41 @@ void *lista_elemento_en_posicion(lista_t *lista, size_t posicion)
 	return NULL;
 }
 
-void *lista_buscar_elemento(lista_t *lista, int (*comparador)(void *, void *),
-			    void *contexto)
+void *lista_buscar_elemento(lista_t *lista, int (*comparador)(void *, void *), void *contexto)
 {
 	return NULL;
 }
 
 void *lista_primero(lista_t *lista)
 {
-	return NULL;
+	if(lista == NULL || lista_vacia(lista))
+		return NULL;
+
+	return lista->nodo_inicio;
 }
 
 void *lista_ultimo(lista_t *lista)
 {
-	return NULL;
+	if(lista == NULL || lista_vacia(lista))
+		return NULL;
+
+	return lista->nodo_fin;
 }
 
 bool lista_vacia(lista_t *lista)
 {
-	return true;
+	if(lista == NULL || lista->cant_nodos == 0)
+		return true;
+	
+	return false;
 }
 
 size_t lista_tamanio(lista_t *lista)
 {
-	return 0;
+	if(lista == NULL)
+		return NULL;
+
+	return lista->cant_nodos;
 }
 
 void lista_destruir(lista_t *lista)
