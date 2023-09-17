@@ -1,6 +1,7 @@
 #include "lista.h"
 #include <stddef.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 typedef struct nodo {
 	void *elemento;
@@ -17,6 +18,14 @@ struct lista_iterador {
 	//y acá?
 	int sarasa;
 };
+
+nodo_t *posicion_nodo(nodo_t *nodo, int posicion){
+
+	if(posicion == 1)
+		return nodo;
+
+	return posicion_nodo(nodo->siguiente, posicion-1);
+}
 
 lista_t *lista_crear()
 {
@@ -66,19 +75,67 @@ lista_t *lista_insertar(lista_t *lista, void *elemento)
 
 lista_t *lista_insertar_en_posicion(lista_t *lista, void *elemento, size_t posicion)
 {
+	if(lista == NULL)
+		return NULL;
 
-	printf("%i", posicion);
-	return NULL;
+	if(lista->cant_nodos < posicion){
+		return lista_insertar(lista, elemento);
+	}
+
+	nodo_t *nodo = nuevo_nodo(elemento);
+
+	if(nodo == NULL)
+		return NULL;
+
+	nodo_t *nodo_a_mover = posicion_nodo(lista->nodo_inicio, (int)posicion);
+
+	nodo->elemento = elemento;
+	nodo->siguiente = nodo_a_mover->siguiente;
+
+	nodo_a_mover->siguiente = nodo;
+
+	return lista;
 }
 
 void *lista_quitar(lista_t *lista)
 {
-	return NULL;
+	if(lista == NULL)
+		return NULL;
+
+	nodo_t *nodo_borrado = lista->nodo_fin;
+
+	nodo_t *nodo_fin = posicion_nodo(lista->nodo_inicio, lista->cant_nodos);
+
+	if(nodo_fin == NULL){
+		return NULL;
+	}
+	
+	lista->nodo_fin = nodo_fin;
+	lista->nodo_fin->siguiente = NULL;
+
+	return nodo_borrado->elemento;
 }
 
 void *lista_quitar_de_posicion(lista_t *lista, size_t posicion)
 {
-	return NULL;
+	if(lista == NULL || lista->cant_nodos == 0)
+		return NULL;
+
+	if(lista->cant_nodos < posicion){
+		return lista_quitar(lista);
+	}
+
+	nodo_t *nodo_anterior = posicion_nodo(lista->nodo_inicio, (int)posicion);
+
+	if(nodo_anterior == NULL){
+		return NULL;
+	}
+
+	nodo_t *nodo_borrado = nodo_anterior->siguiente;
+
+	nodo_anterior->siguiente = nodo_anterior->siguiente->siguiente;
+
+	return nodo_borrado->elemento;
 }
 
 void *lista_elemento_en_posicion(lista_t *lista, size_t posicion)
@@ -117,10 +174,12 @@ bool lista_vacia(lista_t *lista)
 
 size_t lista_tamanio(lista_t *lista)
 {
+	/*
 	if(lista == NULL)
 		return NULL;
 
-	return lista->cant_nodos;
+	return lista->cant_nodos;*/
+	return 0;
 }
 
 void lista_destruir(lista_t *lista)
