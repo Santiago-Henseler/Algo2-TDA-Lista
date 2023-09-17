@@ -1,7 +1,6 @@
 #include "lista.h"
 #include <stddef.h>
 #include <stdlib.h>
-#include <stdio.h>
 
 typedef struct nodo {
 	void *elemento;
@@ -19,23 +18,14 @@ struct lista_iterador {
 	int sarasa;
 };
 
+
+//  funciones auxiliares
 nodo_t *posicion_nodo(nodo_t *nodo, int posicion){
 
 	if(posicion == 1)
 		return nodo;
 
 	return posicion_nodo(nodo->siguiente, posicion-1);
-}
-
-lista_t *lista_crear()
-{
-	struct lista *nueva_lista = calloc(1, sizeof(struct lista *));
-
-	if(nueva_lista == NULL){
-		return NULL;
-	}
-
-	return nueva_lista;
 }
 
 nodo_t *nuevo_nodo(void *elemento){
@@ -48,6 +38,19 @@ nodo_t *nuevo_nodo(void *elemento){
     nodo->elemento = elemento;
 
     return nodo;
+}
+
+//  fin funciones auxiliares
+
+lista_t *lista_crear()
+{
+	struct lista *nueva_lista = calloc(1, sizeof(struct lista *));
+
+	if(nueva_lista == NULL){
+		return NULL;
+	}
+
+	return nueva_lista;
 }
 
 lista_t *lista_insertar(lista_t *lista, void *elemento)
@@ -70,6 +73,7 @@ lista_t *lista_insertar(lista_t *lista, void *elemento)
 		lista->nodo_fin = nodo;
 	}
 
+	lista->cant_nodos++;
 	return lista;
 }
 
@@ -87,13 +91,19 @@ lista_t *lista_insertar_en_posicion(lista_t *lista, void *elemento, size_t posic
 	if(nodo == NULL)
 		return NULL;
 
-	nodo_t *nodo_a_mover = posicion_nodo(lista->nodo_inicio, (int)posicion);
+	if(posicion == 0){
+		nodo->siguiente = lista->nodo_inicio;
+		lista->nodo_inicio = nodo;
+	}else{
+		nodo_t *nodo_a_mover = posicion_nodo(lista->nodo_inicio, (int)posicion);
 
-	nodo->elemento = elemento;
-	nodo->siguiente = nodo_a_mover->siguiente;
+		nodo->siguiente = nodo_a_mover->siguiente;
 
-	nodo_a_mover->siguiente = nodo;
+		nodo_a_mover->siguiente = nodo;
+	}
 
+
+	lista->cant_nodos++;
 	return lista;
 }
 
@@ -104,7 +114,7 @@ void *lista_quitar(lista_t *lista)
 
 	nodo_t *nodo_borrado = lista->nodo_fin;
 
-	nodo_t *nodo_fin = posicion_nodo(lista->nodo_inicio, lista->cant_nodos);
+	nodo_t *nodo_fin = posicion_nodo(lista->nodo_inicio, lista->cant_nodos-1);
 
 	if(nodo_fin == NULL){
 		return NULL;
@@ -113,16 +123,25 @@ void *lista_quitar(lista_t *lista)
 	lista->nodo_fin = nodo_fin;
 	lista->nodo_fin->siguiente = NULL;
 
+	lista->cant_nodos--;
 	return nodo_borrado->elemento;
 }
 
 void *lista_quitar_de_posicion(lista_t *lista, size_t posicion)
 {
+
 	if(lista == NULL || lista->cant_nodos == 0)
 		return NULL;
 
 	if(lista->cant_nodos < posicion){
 		return lista_quitar(lista);
+	}
+
+	if(posicion == 0){
+		nodo_t * aux = lista->nodo_inicio;
+		lista->nodo_inicio = lista->nodo_inicio->siguiente;
+		lista->cant_nodos--;
+		return aux->elemento;
 	}
 
 	nodo_t *nodo_anterior = posicion_nodo(lista->nodo_inicio, (int)posicion);
@@ -135,12 +154,20 @@ void *lista_quitar_de_posicion(lista_t *lista, size_t posicion)
 
 	nodo_anterior->siguiente = nodo_anterior->siguiente->siguiente;
 
+	lista->cant_nodos--;
+
 	return nodo_borrado->elemento;
 }
 
 void *lista_elemento_en_posicion(lista_t *lista, size_t posicion)
 {
-	return NULL;
+	if(lista->cant_nodos < posicion)
+		return NULL;
+
+	if(posicion == 0)
+		return lista->nodo_inicio->elemento;
+
+	return posicion_nodo(lista->nodo_inicio, (int)posicion)->elemento;
 }
 
 void *lista_buscar_elemento(lista_t *lista, int (*comparador)(void *, void *), void *contexto)
@@ -153,7 +180,7 @@ void *lista_primero(lista_t *lista)
 	if(lista == NULL || lista_vacia(lista))
 		return NULL;
 
-	return lista->nodo_inicio;
+	return lista->nodo_inicio->elemento;
 }
 
 void *lista_ultimo(lista_t *lista)
@@ -161,7 +188,7 @@ void *lista_ultimo(lista_t *lista)
 	if(lista == NULL || lista_vacia(lista))
 		return NULL;
 
-	return lista->nodo_fin;
+	return lista->nodo_fin->elemento;
 }
 
 bool lista_vacia(lista_t *lista)
@@ -174,12 +201,10 @@ bool lista_vacia(lista_t *lista)
 
 size_t lista_tamanio(lista_t *lista)
 {
-	/*
 	if(lista == NULL)
-		return NULL;
+		return 0;
 
-	return lista->cant_nodos;*/
-	return 0;
+	return (long unsigned int)lista->cant_nodos;
 }
 
 void lista_destruir(lista_t *lista)
