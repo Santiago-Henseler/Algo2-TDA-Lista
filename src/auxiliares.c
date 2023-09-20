@@ -2,7 +2,7 @@
 
 nodo_t *posicion_nodo(nodo_t *nodo, int posicion){
 
-	if(posicion == 1)
+	if(posicion <= 1)
 		return nodo;
 
 	return posicion_nodo(nodo->siguiente, posicion-1);

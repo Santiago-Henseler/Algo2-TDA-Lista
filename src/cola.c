@@ -4,7 +4,7 @@
 
 struct _cola_t {
 	nodo_t *nodo_inicio;
-	int cant_nodos;
+	size_t cant_nodos;
 	nodo_t *nodo_fin;
 };
 
