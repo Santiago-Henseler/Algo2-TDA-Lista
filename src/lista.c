@@ -13,7 +13,7 @@ struct lista_iterador {
  
 lista_t *lista_crear()
 {
-	struct lista *nueva_lista = calloc(1, sizeof(sizeof(struct lista )));
+	struct lista *nueva_lista = calloc(1, sizeof(sizeof(struct lista *)));
 
 	if(nueva_lista == NULL){
 		return NULL;
@@ -188,7 +188,7 @@ bool lista_vacia(lista_t *lista)
 
 	if(lista->cant_nodos == 0)
 		return true;
-		
+
 	return false;
 }
 
