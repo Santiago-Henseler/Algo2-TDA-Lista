@@ -1,81 +1,44 @@
 #include "cola.h"
 #include "auxiliares.h"
+#include "lista.h"
 
-struct _cola_t
-{
+struct _cola_t {
 	nodo_t *nodo_inicio;
 	int cant_nodos;
+	nodo_t *nodo_fin;
 };
 
 cola_t *cola_crear()
 {
-
-	struct _cola_t *nueva_cola = NULL;
-
-	return constructor(nueva_cola);
+	return (cola_t *)lista_crear();
 }
 
 cola_t *cola_encolar(cola_t *cola, void *elemento)
 {
-	
-	if(cola == NULL)
-		return NULL;
-
-	nodo_t *nodo = nuevo_nodo(elemento);
-
-	if(nodo == NULL)
-		return NULL;
-
-	if(cola_vacia(cola)){
-		cola->nodo_inicio = nodo;
-		cola->nodo_inicio->siguiente = NULL;
-	}else{
-		nodo_t *aux = cola->nodo_inicio;
-		cola->nodo_inicio = nodo;
-		cola->nodo_inicio->siguiente = aux; 
-	}
-
-	cola->cant_nodos++;
-	return cola;
+	return (cola_t *)lista_insertar((lista_t*)cola, elemento);
 }
 
 void *cola_desencolar(cola_t *cola)
 {
-	
-	if(cola_vacia(cola))
-		return NULL;
-
-	nodo_t *nodo_borrado = cola->nodo_inicio;
-
-	if(cola->cant_nodos == 1){
-		cola->nodo_inicio = NULL;
-	}else{
-		nodo_t * aux = cola->nodo_inicio->siguiente;
-		cola->nodo_inicio = aux;
-	}
-
-	cola->cant_nodos--;
-	return nodo_borrado->elemento;
+	return lista_quitar_de_posicion((lista_t*) cola, 0);
 }
 
 void *cola_frente(cola_t *cola)
 {
-	if(cola_vacia(cola))
-		return NULL;
-
-	return first(cola->nodo_inicio);
+	return lista_primero((lista_t *)cola);
 }
 
 size_t cola_tamanio(cola_t *cola)
 {
-	return size(cola, cola->cant_nodos);
+	return lista_tamanio((lista_t *)cola);
 }
 
 bool cola_vacia(cola_t *cola)
 {
-	return is_empty(cola, cola->cant_nodos);
+	return lista_vacia((lista_t *)cola);
 }
 
 void cola_destruir(cola_t *cola)
 {
+	lista_destruir((lista_t *)cola);
 }
