@@ -183,8 +183,12 @@ void *lista_ultimo(lista_t *lista)
 
 bool lista_vacia(lista_t *lista)
 {
-	if(lista == NULL || lista->cant_nodos == 0)
+	if(lista == NULL)
 		return true;
+
+	if(lista->cant_nodos == 0)
+		return true;
+		
 	return false;
 }
 
