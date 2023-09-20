@@ -1,11 +1,5 @@
 #include "lista.h"
-#include <stddef.h>
-#include <stdlib.h>
-
-typedef struct nodo {
-	void *elemento;
-	struct nodo *siguiente;
-} nodo_t;
+#include "auxiliares.h"
 
 struct lista {
 	nodo_t *nodo_inicio;
@@ -17,40 +11,12 @@ struct lista_iterador {
 	//y acá?
 	int sarasa;
 };
-
-
-//  funciones auxiliares
-nodo_t *posicion_nodo(nodo_t *nodo, int posicion){
-
-	if(posicion == 1)
-		return nodo;
-
-	return posicion_nodo(nodo->siguiente, posicion-1);
-}
-
-nodo_t *nuevo_nodo(void *elemento){
-
-    nodo_t* nodo = calloc(1, sizeof(nodo_t));
-	
-    if (nodo == NULL)
-        return NULL;
-
-    nodo->elemento = elemento;
-
-    return nodo;
-}
-
-//  fin funciones auxiliares
-
+ 
 lista_t *lista_crear()
 {
-	struct lista *nueva_lista = calloc(1, sizeof(struct lista *));
-
-	if(nueva_lista == NULL){
-		return NULL;
-	}
-
-	return nueva_lista;
+	struct lista* nueva_lista = NULL;
+	
+	return constructor(nueva_lista);
 }
 
 lista_t *lista_insertar(lista_t *lista, void *elemento)
@@ -177,15 +143,15 @@ void *lista_buscar_elemento(lista_t *lista, int (*comparador)(void *, void *), v
 
 void *lista_primero(lista_t *lista)
 {
-	if(lista == NULL || lista_vacia(lista))
+	if(lista_vacia(lista))
 		return NULL;
 
-	return lista->nodo_inicio->elemento;
+	return first(lista->nodo_inicio);
 }
 
 void *lista_ultimo(lista_t *lista)
 {
-	if(lista == NULL || lista_vacia(lista))
+	if(lista_vacia(lista))
 		return NULL;
 
 	return lista->nodo_fin->elemento;
@@ -193,18 +159,12 @@ void *lista_ultimo(lista_t *lista)
 
 bool lista_vacia(lista_t *lista)
 {
-	if(lista == NULL || lista->cant_nodos == 0)
-		return true;
-	
-	return false;
+	return is_empty(lista, lista->cant_nodos);
 }
 
 size_t lista_tamanio(lista_t *lista)
 {
-	if(lista == NULL)
-		return 0;
-
-	return (long unsigned int)lista->cant_nodos;
+	return size(lista, lista->cant_nodos);
 }
 
 void lista_destruir(lista_t *lista)
@@ -239,8 +199,7 @@ void lista_iterador_destruir(lista_iterador_t *iterador)
 {
 }
 
-size_t lista_con_cada_elemento(lista_t *lista, bool (*funcion)(void *, void *),
-			       void *contexto)
+size_t lista_con_cada_elemento(lista_t *lista, bool (*funcion)(void *, void *),void *contexto)
 {
 	return 0;
 }
