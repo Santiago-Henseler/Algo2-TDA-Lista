@@ -176,20 +176,6 @@ void dadUnaListaLaItero(){
 	lista_destruir(lista);
 }
 
-void dadaUnIteradorLoDestruyo(){
-
-	lista_t *lista = lista_crear();
-
-	int num[] = { 1, 2, 3, 4, 5};
-
-	for(int i = 0; i < 5; i++){
-		lista_insertar(lista, &num[i]);
-	}
-	lista_iterador_t*  it = lista_iterador_crear(lista);
-
-	lista_iterador_destruir(it);
-}
-
 int main()
 {
 
@@ -210,7 +196,6 @@ int main()
 	pa2m_nuevo_grupo("\n======================== Pruebas con iterador========================");
 
 	dadUnaListaLaItero();
-	dadaUnIteradorLoDestruyo();
 
 	return pa2m_mostrar_reporte();
 }

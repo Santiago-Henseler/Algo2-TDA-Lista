@@ -14,7 +14,7 @@ struct lista_iterador {
  
 lista_t *lista_crear()
 {
-	struct lista *nueva_lista = calloc(1, sizeof(sizeof(struct lista *)));
+	struct lista *nueva_lista = calloc(1, sizeof(struct lista *));
 
 	if(nueva_lista == NULL){
 		return NULL;
@@ -209,18 +209,17 @@ void lista_destruir(lista_t *lista)
 	if(lista == NULL)
 		return;
 
-	if(!lista_vacia(lista)){
-		nodo_t *nodo = lista->nodo_inicio;
+	nodo_t *nodo = lista->nodo_inicio;
 
-		while(nodo != NULL)
+	while(nodo != NULL)
 		{
 			nodo_t *aux = nodo->siguiente;
 			free(nodo);
 			nodo = aux;
 		}
 		
-		free(lista);
-	}
+	free(lista);
+	
 }
 
 void lista_destruir_todo(lista_t *lista, void (*funcion)(void *))
