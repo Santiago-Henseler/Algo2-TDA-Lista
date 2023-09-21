@@ -9,11 +9,12 @@ struct lista {
 
 struct lista_iterador {
 	nodo_t *actual;
+	struct lista* lista;
 };
  
 lista_t *lista_crear()
 {
-	struct lista *nueva_lista = calloc(1, sizeof(sizeof(struct lista )));
+	struct lista *nueva_lista = calloc(1, sizeof(sizeof(struct lista *)));
 
 	if(nueva_lista == NULL){
 		return NULL;
@@ -50,7 +51,7 @@ lista_t *lista_insertar_en_posicion(lista_t *lista, void *elemento, size_t posic
 	if(lista == NULL)
 		return NULL;
 
-	if(lista->cant_nodos < posicion){
+	if(lista->cant_nodos <= posicion){
 		return lista_insertar(lista, elemento);
 	}
 
@@ -138,13 +139,15 @@ void *lista_quitar_de_posicion(lista_t *lista, size_t posicion)
 
 void *lista_elemento_en_posicion(lista_t *lista, size_t posicion)
 {
-	if(lista_tamanio(lista) < posicion || lista_vacia(lista))
+	if(lista_tamanio(lista) <= posicion || lista_vacia(lista))
 		return NULL;
 
 	if(posicion == 0)
 		return lista->nodo_inicio->elemento;
 
-	return posicion_nodo(lista->nodo_inicio, (int)posicion)->elemento;
+	nodo_t * nodo_en_pos = posicion_nodo(lista->nodo_inicio, (int)posicion);
+
+	return nodo_en_pos->elemento;
 }
 
 void *lista_buscar_elemento(lista_t *lista, int (*comparador)(void *, void *), void *contexto)
@@ -154,12 +157,12 @@ void *lista_buscar_elemento(lista_t *lista, int (*comparador)(void *, void *), v
 
 	nodo_t *nodo = lista->nodo_inicio;
 
-	while(comparador(nodo->elemento, contexto) != 0 && nodo != NULL)
+	while(comparador(nodo->elemento, contexto) != 0 && nodo->siguiente != NULL)
 	{
 		nodo = nodo->siguiente;
 	}
 	
-	if(nodo == NULL)
+	if(nodo->siguiente == NULL)
 		return NULL;
 	
 	return nodo->elemento;
@@ -194,7 +197,7 @@ size_t lista_tamanio(lista_t *lista)
 	if(lista == NULL)
 		return 0;
 	
-	return (long unsigned int)lista->cant_nodos;
+	return lista->cant_nodos;
 }
 
 void lista_destruir(lista_t *lista)
@@ -232,7 +235,7 @@ void lista_destruir_todo(lista_t *lista, void (*funcion)(void *))
 
 lista_iterador_t *lista_iterador_crear(lista_t *lista)
 {
-	if(lista_vacia(lista))
+	if(lista == NULL)
 		return NULL;
 
 	struct lista_iterador* it = calloc(1, sizeof(struct lista_iterador));
@@ -240,15 +243,27 @@ lista_iterador_t *lista_iterador_crear(lista_t *lista)
 	if(it == NULL)
 		return NULL;
 
-	it->actual = lista->nodo_inicio;
-	it->actual->elemento = lista->nodo_inicio->elemento;
+	if(!lista_vacia(lista)){
+		it->actual = lista->nodo_inicio;
+		it->actual->elemento = lista->nodo_inicio->elemento;
+	}else{
+		it->actual = NULL;
+	}
+
+	it->lista = lista;
 
 	return it;
 }
 
 bool lista_iterador_tiene_siguiente(lista_iterador_t *iterador)
 {
-	if(iterador == NULL || iterador->actual->siguiente == NULL)
+	if(iterador == NULL){
+		return false;
+	}
+	if(lista_vacia(iterador->lista)){
+		return false;
+	}
+	if(iterador->actual->siguiente == NULL)
 		return false;
 	
 	return true;
