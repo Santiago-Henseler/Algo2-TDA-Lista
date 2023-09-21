@@ -145,7 +145,7 @@ void *lista_elemento_en_posicion(lista_t *lista, size_t posicion)
 	if(posicion == 0)
 		return lista->nodo_inicio->elemento;
 
-	nodo_t * nodo_en_pos = posicion_nodo(lista->nodo_inicio, (int)posicion);
+	nodo_t * nodo_en_pos = posicion_nodo(lista->nodo_inicio, (int)posicion+1);
 
 	return nodo_en_pos->elemento;
 }
@@ -157,15 +157,19 @@ void *lista_buscar_elemento(lista_t *lista, int (*comparador)(void *, void *), v
 
 	nodo_t *nodo = lista->nodo_inicio;
 
+
 	while(comparador(nodo->elemento, contexto) != 0 && nodo->siguiente != NULL)
 	{
 		nodo = nodo->siguiente;
 	}
 	
+	if(comparador(nodo->elemento, contexto) == 0)
+		return nodo->elemento;
+
 	if(nodo->siguiente == NULL)
 		return NULL;
 	
-	return nodo->elemento;
+	return NULL;
 }
 
 void *lista_primero(lista_t *lista)
@@ -202,6 +206,9 @@ size_t lista_tamanio(lista_t *lista)
 
 void lista_destruir(lista_t *lista)
 {
+	if(lista == NULL)
+		return;
+
 	if(!lista_vacia(lista)){
 		nodo_t *nodo = lista->nodo_inicio;
 
@@ -218,6 +225,8 @@ void lista_destruir(lista_t *lista)
 
 void lista_destruir_todo(lista_t *lista, void (*funcion)(void *))
 {
+	if(lista == NULL)
+		return;
 	if(!lista_vacia(lista) && funcion == NULL){
 		nodo_t *nodo = lista->nodo_inicio;
 
@@ -263,7 +272,7 @@ bool lista_iterador_tiene_siguiente(lista_iterador_t *iterador)
 	if(lista_vacia(iterador->lista)){
 		return false;
 	}
-	if(iterador->actual->siguiente == NULL)
+	if(iterador->actual == NULL)
 		return false;
 	
 	return true;
@@ -276,7 +285,7 @@ bool lista_iterador_avanzar(lista_iterador_t *iterador)
 
 	iterador->actual = iterador->actual->siguiente;
 
-	return true;
+	return iterador->actual != NULL;
 }
 
 void *lista_iterador_elemento_actual(lista_iterador_t *iterador)
