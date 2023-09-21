@@ -2,28 +2,27 @@
 <img width="32px" src="img/algo2.svg">
 </div>
 
-# NOMBRE TP/TDA
+# TDA Lista-Cola-Pila
 
-## Repositorio de (Nombre Apellido) - (Padrón) - (Mail)
+## Repositorio de Santiago Henseler - 110732 - shenseler@fi.uba.ar
 
 - Para compilar:
 
 ```bash
-línea de compilación
+make pruebas_alumno
 ```
 
 - Para ejecutar:
-
 ```bash
-línea de ejecución
+./pruebas_alumno
 ```
 
 - Para ejecutar con valgrind:
 ```bash
-línea con valgrind
+make valgrind-alumno
 ```
 ---
-##  Funcionamiento
+##  ¿Qué es una lista?
 
 Explicación de cómo funcionan las estructuras desarrolladas en el TP y el funcionamiento general del mismo.
 
