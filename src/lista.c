@@ -14,7 +14,7 @@ struct lista_iterador {
  
 lista_t *lista_crear()
 {
-	struct lista *nueva_lista = calloc(1, sizeof(struct lista *));
+	struct lista *nueva_lista = calloc(1, sizeof(struct lista ));
 
 	if(nueva_lista == NULL){
 		return NULL;
@@ -81,7 +81,9 @@ void *lista_quitar(lista_t *lista)
 	if(lista_vacia(lista))
 		return NULL;
 
-	nodo_t *nodo_borrado = lista->nodo_fin->elemento;
+	nodo_t *nodo_borrado = lista->nodo_fin;
+
+	void * elemento_borrado = lista->nodo_fin->elemento;
 
 	nodo_t * ante_ultimo = posicion_nodo(lista->nodo_inicio, ((int)lista->cant_nodos)-1);
 
@@ -93,8 +95,9 @@ void *lista_quitar(lista_t *lista)
 	lista->nodo_fin->siguiente = NULL;
 
 	lista->cant_nodos--;
+	free(nodo_borrado);
 
-	return nodo_borrado;
+	return elemento_borrado;
 
 }
 
@@ -209,36 +212,51 @@ void lista_destruir(lista_t *lista)
 	if(lista == NULL)
 		return;
 
+	if(lista_vacia(lista)){
+		free(lista);
+		return;
+	}
+
 	nodo_t *nodo = lista->nodo_inicio;
+	nodo_t *aux = NULL;
 
 	while(nodo != NULL)
-		{
-			nodo_t *aux = nodo->siguiente;
-			free(nodo);
-			nodo = aux;
-		}
-		
-	free(lista);
+	{
+		aux = nodo->siguiente;
+		free(nodo);
+		nodo = aux;
+	}
 	
+	free(lista);
 }
 
 void lista_destruir_todo(lista_t *lista, void (*funcion)(void *))
 {
 	if(lista == NULL)
 		return;
-	if(!lista_vacia(lista) && funcion == NULL){
-		nodo_t *nodo = lista->nodo_inicio;
 
-		while(nodo != NULL)
-		{
-			nodo_t *aux = nodo->siguiente;
-			funcion(nodo->elemento);
-			free(nodo);
-			nodo = aux;
-		}
-		
+	if(lista_vacia(lista)){
 		free(lista);
+		return;
 	}
+
+	if(funcion == NULL){
+		lista_destruir(lista);
+		return;
+	}
+	
+	nodo_t *nodo = lista->nodo_inicio;
+	nodo_t *aux = NULL;
+
+	while(nodo != NULL)
+	{
+		aux = nodo->siguiente;
+		funcion(nodo->elemento);
+		free(nodo);
+		nodo = aux;
+	}
+		
+	free(lista);	
 }
 
 lista_iterador_t *lista_iterador_crear(lista_t *lista)
