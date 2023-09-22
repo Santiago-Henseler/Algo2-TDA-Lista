@@ -1,5 +1,5 @@
 #include "cola.h"
-#include "auxiliares.h"
+#include "nodo.h"
 #include "lista.h"
 
 struct _cola_t {

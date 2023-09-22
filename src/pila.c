@@ -1,6 +1,6 @@
 #include "pila.h"
 #include "lista.h"
-#include "auxiliares.h"
+#include "nodo.h"
 #include <stdio.h>
 
 struct _pila_t {

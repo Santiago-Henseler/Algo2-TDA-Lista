@@ -1,5 +1,5 @@
 #include "lista.h"
-#include "auxiliares.h"
+#include "nodo.h"
 
 struct lista {
 	nodo_t *nodo_inicio;
