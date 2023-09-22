@@ -1,5 +1,5 @@
-#ifndef __AUXILIARES_H__
-#define __AUXILIARES_H__
+#ifndef __NODO_H__
+#define __NODO_H_
 
 #include <stdlib.h>
 #include <stddef.h>
@@ -14,4 +14,4 @@ nodo_t *posicion_nodo(nodo_t *nodo, int posicion);
 
 nodo_t *nuevo_nodo(void *elemento);
 
-#endif /* __ AUXILIARES_H__*/
+#endif /*__NODO_H_*/
