@@ -106,14 +106,6 @@ void dadaUnaListaBorroElementosEnPosicion()
 	lista_destruir(lista);
 }
 
-void dadaUnaListaLaDestruyo()
-{
-	lista_t *lista = lista_crear();
-
-	lista_destruir(lista);
-	pa2m_afirmar(lista_vacia(lista), "destruyo una lista");
-}
-
 // pruebas con lista NULL
 void dadaUnaListaNulaNoInsertaElementos()
 {
@@ -239,7 +231,6 @@ void dadoUnIteradorNuloNoRecorro()
 
 	pa2m_afirmar(cant_i == 0, "no recorro con un iterador nulo");
 
-	lista_iterador_destruir(it);
 	lista_destruir(lista);
 }
 
@@ -266,6 +257,8 @@ void dadoUnaListaLaIteroInternamente()
 
 	pa2m_afirmar(i == 5,
 		     "itero todos los elementos con el iterador interno");
+
+	lista_destruir(lista);
 }
 
 //iterador interno NULL
@@ -298,6 +291,8 @@ void dadaUnaFuncionNulaNoRecorro()
 	pa2m_afirmar(
 		i == 0,
 		"no itero con el iterador interno si la funcion no existe");
+
+	lista_destruir(lista);
 }
 
 int main()
@@ -309,7 +304,6 @@ int main()
 	dadaUnaListaBorroVariosElementos();
 	dadaUnaListaInsertoElementosEnPosicion();
 	dadaUnaListaBorroElementosEnPosicion();
-	dadaUnaListaLaDestruyo();
 
 	pa2m_nuevo_grupo(
 		"\n======================== Pruebas lista NULL ========================");
