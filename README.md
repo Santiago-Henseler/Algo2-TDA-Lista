@@ -165,9 +165,9 @@ Contando todas las instrucciones se llega a la siguiente ecuación: `T(n) = 1+1+
 
 La complejidad algoritmica para las 3 operaciones con el primer elemento de la lista es *O(1)* porque tenemos a disposicion el puntero al primer elemento, lo que favorece a no tener que iterar toda la lista. Tambien se cumple que insertar y obtener al final es *O(1)* porque tambien tenemos el puntero al ultimo elemento. En cambio para borrar al final tenemos que recorrer hasta el anteultimo elemento, analizemos su complejidad:
 
--->borrar al final:
+-->Borrar al final:
 
-```
+```c
     nodo_t *nodo_borrado = lista->nodo_fin; --> 1
 
 	void *elemento_borrado = lista->nodo_fin->elemento; --> 1
@@ -180,4 +180,47 @@ La complejidad algoritmica para las 3 operaciones con el primer elemento de la l
 	lista->cant_nodos--; --> 1
 	free(nodo_borrado); --> 1
 ```
+
 Contando todas las instrucciones se llega a la siguiente ecuación: `T(n) = 1+1+1+1+1+1+n-1` . Entonces tiene una complejidad de *O(n)* porque: `5+n < N , ∀ N > 5`
+<br>
+
+-->Insertar al medio:
+
+```c
+	if {
+		nodo_t *posicion_a_insertar = posicion_nodo(lista->nodo_inicio, (int)posicion); --> n
+		nodo->siguiente = posicion_a_insertar->siguiente; --> 1
+		posicion_a_insertar->siguiente = nodo; --> 1
+	}
+
+	lista->cant_nodos++; --> 1
+```
+Contando todas las instrucciones se llega a la siguiente ecuación: `T(n) = 1+1+1n` . Entonces tiene una complejidad de *O(n)* porque: `3+n < N , ∀ N > 3`
+<br>
+
+-->Borrar al medio:
+
+```c
+	nodo_t *nuevo_nodo_fin = posicion_nodo(lista->nodo_inicio, (int)posicion); --> n
+
+	nodo_t *nodo_borrado = nuevo_nodo_fin->siguiente; --> 1
+	void *aux = nuevo_nodo_fin->siguiente->elemento; --> 1
+
+	nuevo_nodo_fin->siguiente = nuevo_nodo_fin->siguiente->siguiente; --> 1
+
+	free(nodo_borrado); --> 1
+	lista->cant_nodos--; --> 1
+``` 
+Contando todas las instrucciones se llega a la siguiente ecuación: `T(n) = n+1+1+1+1+1` . Entonces tiene una complejidad de *O(n)* porque: `n+5 < N , ∀ N > 5`
+
+<br>
+
+-->Obtener al medio:
+
+```c
+nodo_t *nodo_en_pos = posicion_nodo(lista->nodo_inicio, (int)posicion + 1); --> n+1
+
+``` 
+Contando todas las instrucciones se llega a la siguiente ecuación: `T(n) = n+1` . Entonces tiene una complejidad de *O(n)* porque: `n+1 < N , ∀ N > 2`
+
+
