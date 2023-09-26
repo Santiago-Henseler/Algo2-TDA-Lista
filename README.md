@@ -76,48 +76,108 @@ A su vez los nodos se pueden implementar de dos maneras distintas:
 <img width="70%" src="img/lista_nodo1.jpg">
 </div>
 
--->La complejidad algoritmica para -Insertar al inicio o al final- en las listas implementadas con nodos simplemente enlazados es:
+-- Ahora voy a analizar las distintas complejidades algoritmicas de la implementación con nodos simplemente enlazados:
+
+-->Insertar al inicio o al final:
+
+```
+creo un nuevo nodo --> 1
+asigno como siguiente al nuevo nodo el nodo que esta en primera posicion --> 1
+asigno como primer nodo al nuevo --> 1
+agrando la cantidad de nodos --> 1
+```
 
 <div align="center">
 <img width="70%" src="img/lista_nodo1_insertar.jpg">
 </div>
-  
+
+```c
+// al final
+	nodo_t *nodo = nuevo_nodo(elemento); --> 1
+
+	if (lista_vacia(lista)) {
+		lista->nodo_inicio = nodo; --> 1
+		lista->nodo_fin = nodo; --> 1
+	} else {
+		lista->nodo_fin->siguiente = nodo; --> 1
+		lista->nodo_fin = nodo; --> 1
+	}
+
+	lista->cant_nodos++; --> 1
+
+// al inicio
+    nodo_t *nodo = nuevo_nodo(elemento); --> 1
+
+	if (posicion == 0) {
+		nodo->siguiente = lista->nodo_inicio; --> 1
+		lista->nodo_inicio = nodo; --> 1
+	}
+
+	lista->cant_nodos++;  --> 1
+
+
 ```
-creo un nuevo nodo --> 1
-asigno como siguiente al nuevo nodo el nodo que esta en primera posicion --> 1
-asigno como primer nodo al nuevo -->1
-```
-Contando todas las instrucciones se llega a la siguiente ecuación: `T(n) = 1+1+1` . Entonces tiene una complejidad de *O(1)* porque: `3 < N , ∀ N > 3`
+Contando todas las instrucciones, insertando al inicio o al final, se llega a la siguiente ecuación: `T(n) = 1+1+1+1`. Entonces tiene una complejidad de *O(1)* porque: `4 < N , ∀ N > 4`
 
 <br>
 
--->La complejidad algoritmica para -Borrar al inicio- en las listas implementadas con nodos simplemente enlazados es:
+-->obtener al inicio o al final:
+
+```c
+// Al final
+    lista->nodo_fin; --> 1
+
+// Al inicio
+    lista->nodo_inicio; --> 1
+```
+Contando todas las instrucciones se llega a la siguiente ecuación: `T(n) = 1` . Entonces tiene una complejidad de *O(1)* porque: `1 < N , ∀ N > 1`
+<br>
+
+--> Borrar al inicio:
+
+```
+creo un puntero aux --> 1
+apunto aux al nodo a borrar --> 1
+asigno como primer nodo al segundo nodo --> 1
+libero la memoria de aux --> 1
+disminuyo la cantidad de nodos --> 1
+```
 
 <div align="center">
 <img width="70%" src="img/lista_nodo1_borrar.jpg">
 </div>
 
-```
-creo un puntero aux --> 1
-apunto aux al nodo a borrar --> 1
-asigno como primer nodo al segundo nodo -->1
-libero la memoria de aux -->1
-```
-Contando todas las instrucciones se llega a la siguiente ecuación: `T(n) = 1+1+1+1` . Entonces tiene una complejidad de *O(1)* porque: `4 < N , ∀ N > 4`
+```c
+	if (posicion == 0) {
+		void *aux = lista->nodo_inicio->elemento; --> 1
+		nodo_t *nodo_borrado = lista->nodo_inicio; --> 1
 
--->La complejidad algoritmica para -obtener al inicio o al final- en las listas implementadas con nodos simplemente enlazados es:
-```
-apunto al primer nodo --> 1
-```
-Contando todas las instrucciones se llega a la siguiente ecuación: `T(n) = 1` . Entonces tiene una complejidad de *O(1)* porque: `1 < N , ∀ N > 1`
+		lista->nodo_inicio = lista->nodo_inicio->siguiente; --> 1
 
-La complejidad algoritmica para las 3 operaciones con el primer elemento de la lista es *O(1)* porque tenemos a disposicion el puntero al primer elemento, lo que favorece a no tener que iterar toda la lista. Tambien se cumple que insertar y obtener al final es *O(1)* porque tambien tenemos el puntero al ultimo elemento. En cambio:
+		free(nodo_borrado); --> 1
+		lista->cant_nodos--; --> 1
 
--->La complejidad algoritmica para -borrar al final- en las listas implementadas con nodos simplemente enlazados es:
+	}
+
 ```
-libreo la memoria del ultimo nodo --> 1
-recorro hasta el anteultimo nodo --> n-1
-apunto el anteultimo nodo a NULL --> 1
-asigno como ultimo nodo al anteultimo --> 1
+Contando todas las instrucciones se llega a la siguiente ecuación: `T(n) = 1+1+1+1+1` . Entonces tiene una complejidad de *O(1)* porque: `5 < N , ∀ N > 5`
+<br>
+
+La complejidad algoritmica para las 3 operaciones con el primer elemento de la lista es *O(1)* porque tenemos a disposicion el puntero al primer elemento, lo que favorece a no tener que iterar toda la lista. Tambien se cumple que insertar y obtener al final es *O(1)* porque tambien tenemos el puntero al ultimo elemento. En cambio para borrar al final tenemos que recorrer hasta el anteultimo elemento, analizemos su complejidad:
+
+-->borrar al final:
+
 ```
-Contando todas las instrucciones se llega a la siguiente ecuación: `T(n) = 1+1+1+n-1` . Entonces tiene una complejidad de *O(n)* porque: `2+n < N , ∀ N > 3`
+    nodo_t *nodo_borrado = lista->nodo_fin; --> 1
+
+	void *elemento_borrado = lista->nodo_fin->elemento; --> 1
+
+	nodo_t *ante_ultimo = posicion_nodo(lista->nodo_inicio, ((int)lista->cant_nodos) - 1); --> n-1
+
+	lista->nodo_fin = ante_ultimo; --> 1
+	lista->nodo_fin->siguiente = NULL; --> 1
+
+	lista->cant_nodos--; --> 1
+	free(nodo_borrado); --> 1
+```
+Contando todas las instrucciones se llega a la siguiente ecuación: `T(n) = 1+1+1+1+1+1+n-1` . Entonces tiene una complejidad de *O(n)* porque: `5+n < N , ∀ N > 5`
