@@ -259,3 +259,11 @@ struct nodo_t{
 
 Contando todas las instrucciones se llega a la siguiente ecuación: `T(n) = 1+1+1+1+1` . Entonces tiene una complejidad de *O(1)* porque: `5 < N , ∀ N > 5`
 
+---
+##  ¿Qué es una pila?
+
+Es un T.D.A. en el cual almacenar elementos en un orden específico. La pila se caracteriza por ser una estructura de tipo LIFO (last-in, first-out), lo que significa que el último elemento que se insertó es el primero en salir. Para este tp implemente este T.D.A. a partir de la estructura del T.D.A. lista. 
+
+- Ahora voy a analizar las distintas complejidades algoritmicas de la implementación de la pila:
+
+--> Insertar/obtener/eliminar al inicio:
