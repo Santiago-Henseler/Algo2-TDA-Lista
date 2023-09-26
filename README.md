@@ -237,10 +237,10 @@ struct nodo_t{
 }
 ```
 <div align="center">
-<img width="70%" src="img/lista_nodo1.jpg">
+<img width="70%" src="img/lista_nodo_dob.jpg">
 </div>
-
-- Ahora voy a analizar las distintas complejidades algoritmicas de la implementación con nodos simplemente enlazados:
+<br>
+- Ahora voy a analizar las distintas complejidades algoritmicas de la implementación con nodos doblemente enlazados:
 
 --> Insertar/obtener/eliminar al inicio: Mantiene la misma complejidad que en la otra implementación.
 --> Insertar/obtener/eliminar al medio: Mantiene la misma complejidad que en la otra implementación.
@@ -258,7 +258,7 @@ struct nodo_t{
 ```
 
 Contando todas las instrucciones se llega a la siguiente ecuación: `T(n) = 1+1+1+1+1` . Entonces tiene una complejidad de *O(1)* porque: `5 < N , ∀ N > 5`
-
+<br>
 ---
 ##  ¿Qué es una pila?
 
@@ -266,4 +266,45 @@ Es un T.D.A. en el cual almacenar elementos en un orden específico. La pila se 
 
 - Ahora voy a analizar las distintas complejidades algoritmicas de la implementación de la pila:
 
---> Insertar/obtener/eliminar al inicio:
+--> En el T.D.A. pila se pueden insertar valores solo al final(push), implementandose de la misma manera que se implementa la insercion en las listas con nodos simplemente enlazados:
+```c
+    	(pila_t *)lista_insertar((lista_t *)pila, elemento);
+```
+==> Insertar al final de una pila es O(1).
+
+--> Solo se puede borrar al final de una pila (pop). Tambien reutilizo la manera que se borra al final de una listas con nodos simplemente enlazados:
+```c
+    	lista_quitar((lista_t *)pila);
+```
+==> Borrar al final de una pila es O(1).
+
+--> Solo podemos conocer el ultimo elemento de la pila, como en los anteriores, reutilizo el codigo de las listas con nodos simplemente enlazados:
+```c
+    	lista_ultimo((lista_t *)pila);
+```
+==> Obtener al final de una pila es O(1).
+
+---
+## ¿Qué es una cola?
+Al igual que la pila, una cola es un T.D.A. que nos permite almacenar elementosen un orden específico. Se caracteriza por ser una estructura FIFO (first-in, first-out), lo que significa que el primer elemento que se insertó es el primero en salir.
+
+- Ahora voy a analizar las distintas complejidades algoritmicas de la implementación de la cola:
+
+--> En el T.D.A. cola solo se pueden insertar valores al final(encolar), implementandose de la misma manera que se implementa la insercion en las listas con nodos simplemente enlazados:
+```c
+    	 (cola_t *)lista_insertar((lista_t *)cola, elemento);
+```
+==> Insertar al final de una cola es O(1).
+
+--> Solo se puede borrar al inicio de una cola(desencolar). Tambien reutilizo la manera que se borra al final de una listas con nodos simplemente enlazados:
+```c
+    	 lista_quitar_de_posicion((lista_t *)cola, 0);
+```
+==> Borrar al final de una pila es O(1).
+
+--> Solo podemos conocer el primer elemento de la cola, como en los anteriores, reutilizo el codigo de las listas con nodos simplemente enlazados:
+```c
+    	 lista_primero((lista_t *)cola);
+```
+==> Obtener al final de una cola es O(1).
+
