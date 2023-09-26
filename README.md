@@ -24,7 +24,7 @@ make valgrind-alumno
 ---
 ##  ¿Qué es una lista?
 
-Una lista es un T.D.A.(tipo de dato abstracto) que agrupa elementos, los cuales tienen un orden establecido, con predecesores(menos el primero) y sucesores(menos el ultimo). Y su ultimo elemento siempre apunta al NULL.
+Una lista es un T.D.A.(tipo de dato abstracto) que agrupa elementos, los cuales tienen un orden establecido, con predecesores(menos el primero) y sucesores(menos el ultimo).
 
 <br />
 <div align="center">
@@ -64,14 +64,17 @@ struct lista{
     nodo_t nodo_fin*;
 }
 
+```
+A su vez los nodos se pueden implementar de dos maneras distintas:
+
+- Nodos simplemente enlazados: Cada nodo referencia solo a su sucesor(menos el ultimo)
+
+```c
 struct nodo_t{
     nodo_t siguiente_nodo*;
     void* elemento;
 }
 ```
-A su vez los nodos se pueden implementar de dos maneras distintas:
-
-- Nodos simplemente enlazados: Cada nodo referencia solo a su sucesor(menos el ultimo)
 <div align="center">
 <img width="70%" src="img/lista_nodo1.jpg">
 </div>
