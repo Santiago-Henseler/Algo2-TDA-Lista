@@ -67,7 +67,8 @@ struct lista{
 ```
 A su vez los nodos se pueden implementar de dos maneras distintas:
 
-- Nodos simplemente enlazados: Cada nodo referencia solo a su sucesor(menos el ultimo)
+# Nodos simplemente enlazados:
+Cada nodo referencia solo a su sucesor(menos el ultimo)
 
 ```c
 struct nodo_t{
@@ -79,7 +80,7 @@ struct nodo_t{
 <img width="70%" src="img/lista_nodo1.jpg">
 </div>
 
--- Ahora voy a analizar las distintas complejidades algoritmicas de la implementación con nodos simplemente enlazados:
+- Ahora voy a analizar las distintas complejidades algoritmicas de la implementación con nodos simplemente enlazados:
 
 -->Insertar al inicio o al final:
 
@@ -152,7 +153,6 @@ disminuyo la cantidad de nodos --> 1
 
 ```c
 	if (posicion == 0) {
-		void *aux = lista->nodo_inicio->elemento; --> 1
 		nodo_t *nodo_borrado = lista->nodo_inicio; --> 1
 
 		lista->nodo_inicio = lista->nodo_inicio->siguiente; --> 1
@@ -163,7 +163,7 @@ disminuyo la cantidad de nodos --> 1
 	}
 
 ```
-Contando todas las instrucciones se llega a la siguiente ecuación: `T(n) = 1+1+1+1+1` . Entonces tiene una complejidad de *O(1)* porque: `5 < N , ∀ N > 5`
+Contando todas las instrucciones se llega a la siguiente ecuación: `T(n) = 1+1+1+1` . Entonces tiene una complejidad de *O(1)* porque: `4 < N , ∀ N > 4`
 <br>
 
 La complejidad algoritmica para las 3 operaciones con el primer elemento de la lista es *O(1)* porque tenemos a disposicion el puntero al primer elemento, lo que favorece a no tener que iterar toda la lista. Tambien se cumple que insertar y obtener al final es *O(1)* porque tambien tenemos el puntero al ultimo elemento. En cambio para borrar al final tenemos que recorrer hasta el anteultimo elemento, analizemos su complejidad:
@@ -171,9 +171,7 @@ La complejidad algoritmica para las 3 operaciones con el primer elemento de la l
 -->Borrar al final:
 
 ```c
-    nodo_t *nodo_borrado = lista->nodo_fin; --> 1
-
-	void *elemento_borrado = lista->nodo_fin->elemento; --> 1
+        nodo_t *nodo_borrado = lista->nodo_fin; --> 1
 
 	nodo_t *ante_ultimo = posicion_nodo(lista->nodo_inicio, ((int)lista->cant_nodos) - 1); --> n-1
 
@@ -184,7 +182,7 @@ La complejidad algoritmica para las 3 operaciones con el primer elemento de la l
 	free(nodo_borrado); --> 1
 ```
 
-Contando todas las instrucciones se llega a la siguiente ecuación: `T(n) = 1+1+1+1+1+1+n-1` . Entonces tiene una complejidad de *O(n)* porque: `5+n < N , ∀ N > 5`
+Contando todas las instrucciones se llega a la siguiente ecuación: `T(n) = 1+1+1+1+1+n-1` . Entonces tiene una complejidad de *O(n)* porque: `4+n < N , ∀ N > 4`
 <br>
 
 -->Insertar al medio:
@@ -222,8 +220,42 @@ Contando todas las instrucciones se llega a la siguiente ecuación: `T(n) = n+1+
 
 ```c
 nodo_t *nodo_en_pos = posicion_nodo(lista->nodo_inicio, (int)posicion + 1); --> n+1
-
 ``` 
 Contando todas las instrucciones se llega a la siguiente ecuación: `T(n) = n+1` . Entonces tiene una complejidad de *O(n)* porque: `n+1 < N , ∀ N > 2`
 
+- Nodos simplemente enlazados: Cada nodo referencia solo a su sucesor(menos el ultimo)
+<br>
+
+# Nodos doblemente enlazados:
+Cada nodo referencia a su sucesor(menos el ultimo) y a su predecesor(menos el primero).
+
+```c
+struct nodo_t{
+    	nodo_t siguiente_nodo*;
+    	void* elemento;
+	nodo_t anterior_nodo*;
+}
+```
+<div align="center">
+<img width="70%" src="img/lista_nodo1.jpg">
+</div>
+
+- Ahora voy a analizar las distintas complejidades algoritmicas de la implementación con nodos simplemente enlazados:
+
+--> Insertar/obtener/eliminar al inicio: Mantiene la misma complejidad que en la otra implementación.
+--> Insertar/obtener/eliminar al medio: Mantiene la misma complejidad que en la otra implementación.
+--> Insertar/obtener al final: Mantiene la misma complejidad que en la otra implementación.
+--> Eliminar al final:
+
+```c
+    	nodo_t *nodo_borrado = lista->nodo_fin; --> 1
+
+	lista->nodo_fin = lista->nodo_fin->anterior_nodo; --> 1
+	lista->nodo_fin->siguiente = NULL; --> 1
+
+	lista->cant_nodos--; --> 1
+	free(nodo_borrado); --> 1
+```
+
+Contando todas las instrucciones se llega a la siguiente ecuación: `T(n) = 1+1+1+1+1` . Entonces tiene una complejidad de *O(1)* porque: `5 < N , ∀ N > 5`
 
