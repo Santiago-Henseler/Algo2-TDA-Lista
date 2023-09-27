@@ -28,17 +28,17 @@ lista_t *lista_insertar(lista_t *lista, void *elemento)
 	if (lista == NULL)
 		return NULL;
 
-	nodo_t *nodo = nuevo_nodo(elemento);
+	nodo_t *nuevo = nuevo_nodo(elemento);
 
-	if (nodo == NULL)
+	if (nuevo == NULL)
 		return NULL;
 
 	if (lista_vacia(lista)) {
-		lista->nodo_inicio = nodo;
-		lista->nodo_fin = nodo;
+		lista->nodo_inicio = nuevo;
+		lista->nodo_fin = nuevo;
 	} else {
-		lista->nodo_fin->siguiente = nodo;
-		lista->nodo_fin = nodo;
+		lista->nodo_fin->siguiente = nuevo;
+		lista->nodo_fin = nuevo;
 	}
 
 	lista->cant_nodos++;
@@ -55,20 +55,20 @@ lista_t *lista_insertar_en_posicion(lista_t *lista, void *elemento,
 		return lista_insertar(lista, elemento);
 	}
 
-	nodo_t *nodo = nuevo_nodo(elemento);
+	nodo_t *nuevo = nuevo_nodo(elemento);
 
-	if (nodo == NULL)
+	if (nuevo == NULL)
 		return NULL;
 
 	if (posicion == 0) {
-		nodo->siguiente = lista->nodo_inicio;
-		lista->nodo_inicio = nodo;
+		nuevo->siguiente = lista->nodo_inicio;
+		lista->nodo_inicio = nuevo;
 	} else {
 		nodo_t *posicion_a_insertar =
 			posicion_nodo(lista->nodo_inicio, (int)posicion);
 
-		nodo->siguiente = posicion_a_insertar->siguiente;
-		posicion_a_insertar->siguiente = nodo;
+		nuevo->siguiente = posicion_a_insertar->siguiente;
+		posicion_a_insertar->siguiente = nuevo;
 	}
 
 	lista->cant_nodos++;
