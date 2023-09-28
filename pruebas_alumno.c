@@ -2,6 +2,13 @@
 #include "src/lista.h"
 
 // pruebas con lista no NULL
+void creoUnaListaIniciaVacia()
+{
+	lista_t *lista = lista_crear();
+	pa2m_afirmar(lista_tamanio(lista) == 0, "Creo una lista y esta vacia");
+	lista_destruir(lista);
+}
+
 void dadaUnaListaInsertoVariosElementos()
 {
 	lista_t *lista = lista_crear();
@@ -69,8 +76,9 @@ void dadaUnaListaInsertoElementosEnPosicion()
 		     "Inserto el 6 en posicion 2");
 
 	lista_insertar_en_posicion(lista, &num[6], 1000);
-	pa2m_afirmar((int *)lista_ultimo(lista) == &num[6],
-		     "Inserto el 7 en posicion inexistente");
+	pa2m_afirmar(
+		(int *)lista_ultimo(lista) == &num[6],
+		"Inserto el 7 en posicion inexistente y lo inserta al final");
 
 	lista_insertar_en_posicion(lista, &num[7], 0);
 	pa2m_afirmar((int *)lista_primero(lista) == &num[7],
@@ -102,6 +110,38 @@ void dadaUnaListaBorroElementosEnPosicion()
 	pa2m_afirmar(
 		(int *)lista_quitar_de_posicion(lista, 1000) == &num[7],
 		"Borro un elemento fuera de la lista y se borra el ultimo");
+
+	lista_destruir(lista);
+}
+
+int es_igual(void *actual, void *buscado)
+{
+	int *a = actual;
+	int *b = buscado;
+
+	if (a && b && *a == *b)
+		return 0;
+
+	return -1;
+}
+
+void dadaUnaListaObtengoElementos()
+{
+	lista_t *lista = lista_crear();
+
+	int num[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
+
+	for (int i = 0; i < 8; i++) {
+		lista_insertar(lista, &num[i]);
+	}
+
+	pa2m_afirmar((int *)lista_buscar_elemento(lista, es_igual, &num[2]) ==
+			     &num[2],
+		     "Obtengo el numero buscado");
+
+	pa2m_afirmar((int *)lista_buscar_elemento(lista, es_igual, &num[7]) ==
+			     (int *)lista_ultimo(lista),
+		     "Obtengo el ultimo numero");
 
 	lista_destruir(lista);
 }
@@ -183,10 +223,6 @@ void dadaUnaListaNulaNoLaIteroExternamente()
 
 	int num[] = { 1, 2, 3, 4, 5 };
 
-	for (int i = 0; i < 5; i++) {
-		lista_insertar(lista, &num[i]);
-	}
-
 	lista_iterador_t *it = lista_iterador_crear(lista);
 
 	int cant_i = 0;
@@ -201,6 +237,31 @@ void dadaUnaListaNulaNoLaIteroExternamente()
 	}
 
 	pa2m_afirmar(cant_i == 0, "no recorro una lista nula");
+
+	lista_iterador_destruir(it);
+	lista_destruir(lista);
+}
+
+void dadaUnaListaVaciaNoLaIteroExternamente()
+{
+	lista_t *lista = lista_crear();
+
+	int num[] = { 1, 2, 3, 4, 5 };
+
+	lista_iterador_t *it = lista_iterador_crear(lista);
+
+	int cant_i = 0;
+
+	int posicion_correcta = 0;
+
+	while (lista_iterador_tiene_siguiente(it)) {
+		if ((int *)lista_iterador_elemento_actual(it) == &num[cant_i])
+			posicion_correcta++;
+		cant_i++;
+		lista_iterador_avanzar(it);
+	}
+
+	pa2m_afirmar(cant_i == 0, "no recorro una lista vacia");
 
 	lista_iterador_destruir(it);
 	lista_destruir(lista);
@@ -241,6 +302,16 @@ bool contar_iteracion(void *a, void *i)
 	return true;
 }
 
+bool contar_iteracion_parar(void *a, void *i)
+{
+	if ((*(int *)i) == 2) {
+		return false;
+	}
+
+	(*(int *)i)++;
+	return true;
+}
+
 void dadoUnaListaLaIteroInternamente()
 {
 	lista_t *lista = lista_crear();
@@ -253,10 +324,45 @@ void dadoUnaListaLaIteroInternamente()
 
 	int i = 0;
 
-	lista_con_cada_elemento(lista, &contar_iteracion, (void *)&i);
+	lista_con_cada_elemento(lista, contar_iteracion, (void *)&i);
 
 	pa2m_afirmar(i == 5,
 		     "itero todos los elementos con el iterador interno");
+
+	lista_destruir(lista);
+}
+
+void dadoUnaListaLaIteroInternamenteUnaParte()
+{
+	lista_t *lista = lista_crear();
+
+	int num[] = { 1, 2, 3, 4, 5 };
+
+	for (int i = 0; i < 5; i++) {
+		lista_insertar(lista, &num[i]);
+	}
+
+	int i = 0;
+
+	lista_con_cada_elemento(lista, contar_iteracion_parar, (void *)&i);
+
+	pa2m_afirmar(
+		i == 2,
+		"itero hasta la condicion de corte los elementos con el iterador interno");
+
+	lista_destruir(lista);
+}
+
+void dadoUnaListaVaciaLaIteroInternamente()
+{
+	lista_t *lista = lista_crear();
+
+	int i = 0;
+
+	lista_con_cada_elemento(lista, contar_iteracion, (void *)&i);
+
+	pa2m_afirmar(i == 0,
+		     "no itero una lista vacia con el iterador interno");
 
 	lista_destruir(lista);
 }
@@ -269,7 +375,7 @@ void dadaUnaListaNulaNoLaIteroInternamente()
 
 	int i = 0;
 
-	lista_con_cada_elemento(lista, &contar_iteracion, (void *)&i);
+	lista_con_cada_elemento(lista, contar_iteracion, (void *)&i);
 
 	pa2m_afirmar(i == 0, "no itero una lista nula con el iterador interno");
 }
@@ -299,11 +405,12 @@ int main()
 {
 	pa2m_nuevo_grupo(
 		"\n======================== Pruebas lista ========================");
-
+	creoUnaListaIniciaVacia();
 	dadaUnaListaInsertoVariosElementos();
 	dadaUnaListaBorroVariosElementos();
 	dadaUnaListaInsertoElementosEnPosicion();
 	dadaUnaListaBorroElementosEnPosicion();
+	dadaUnaListaObtengoElementos();
 
 	pa2m_nuevo_grupo(
 		"\n======================== Pruebas lista NULL ========================");
@@ -321,12 +428,15 @@ int main()
 		"\n======================== Pruebas con iterador externo NULL ========================");
 
 	dadaUnaListaNulaNoLaIteroExternamente();
+	dadaUnaListaVaciaNoLaIteroExternamente();
 	dadoUnIteradorNuloNoRecorro();
 
 	pa2m_nuevo_grupo(
 		"\n======================== Pruebas con iterador interno ========================");
 
 	dadoUnaListaLaIteroInternamente();
+	dadoUnaListaLaIteroInternamenteUnaParte();
+	dadoUnaListaVaciaLaIteroInternamente();
 
 	pa2m_nuevo_grupo(
 		"\n======================== Pruebas con iterador interno NULL ========================");
