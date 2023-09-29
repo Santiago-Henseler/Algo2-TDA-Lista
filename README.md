@@ -258,7 +258,8 @@ struct nodo_t{
 ```
 
 Contando todas las instrucciones se llega a la siguiente ecuación: `T(n) = 1+1+1+1+1` . Entonces tiene una complejidad de *O(1)* porque: `5 < N , ∀ N > 5`
-<br>
+
+
 ---
 ##  ¿Qué es una pila?
 
