@@ -56,7 +56,7 @@ struct lista{
     int cant_elementos;
 }
 ```
-- Nodos: consiste en la implementacion de una lista como una serie de nodos enlazados los cuales contienen un valor y un puntero al siguiente nodo. De esta forma, todos los nodos quedan conectados mediante este puntero. La mayor ventaja que tiene es que utilizamos secciones separadas de memoria para cada nodo, descartando el problema de los vectores dinamicos.
+- Nodos: consiste en la implementacion de una lista como una serie de nodos enlazados los cuales contienen un valor y un puntero al siguiente nodo. De esta forma, todos los nodos quedan conectados mediante este puntero. La mayor ventaja que tiene es que utilizamos secciones separadas de memoria para cada nodo, descartando el problema de los vectores dinamicos. Implementados en la librería `nodo.h`.
 ```c
 struct lista{
     nodo_t nodo_inicio*;
