@@ -2,6 +2,7 @@
 #define __PA2M_H_
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #define BLANCO "\x1b[37;1m"
 #define VERDE "\x1b[32;1m"
